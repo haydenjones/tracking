@@ -1,0 +1,31 @@
+package ca.jhayden.tracking.swing.simple;
+
+import javax.swing.JFrame;
+
+import ca.jhayden.tracking.boundary.TrackException;
+import ca.jhayden.tracking.entity.Track;
+import ca.jhayden.tracking.swing.SimpleHub;
+
+public class SimpleTrackingJFrame extends JFrame implements SimpleHub {
+	private static final long serialVersionUID = -6727999856815813793L;
+
+	private final SimpleUiSetup setup;
+
+	public SimpleTrackingJFrame(SimpleUiSetup setup) {
+		super();
+		this.setup = setup;
+		SimpleMainJPanel main = new SimpleMainJPanel(this, setup);
+		add(main);
+	}
+
+	@Override
+	public void submit(Track track) {
+		try {
+			setup.api().record(track);
+			System.out.println("Recorded!");
+		}
+		catch (TrackException e) {
+			e.printStackTrace();
+		}
+	}
+}

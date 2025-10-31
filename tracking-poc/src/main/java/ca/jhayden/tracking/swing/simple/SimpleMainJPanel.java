@@ -4,8 +4,10 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -20,9 +22,16 @@ import ca.jhayden.tracking.swing.SimpleHub;
 
 public class SimpleMainJPanel extends JPanel implements ActionListener {
 
+	static DefaultComboBoxModel<TrackingTypeInfo> toArray(Collection<TrackingTypeInfo> list) {
+		TrackingTypeInfo[] array = new TrackingTypeInfo[list.size()];
+		list.toArray(array);
+		DefaultComboBoxModel<TrackingTypeInfo> model = new DefaultComboBoxModel<TrackingTypeInfo>(array);
+		return model;
+	}
+
 	private static final long serialVersionUID = -1836741894450528822L;
 
-	private final JComboBox cbMenu = new JComboBox();
+	private final JComboBox<TrackingTypeInfo> cbMenu;
 	private final JButton buttonMenu = new JButton("Menu");
 
 	private final SimpleHub simpleHub;
@@ -31,6 +40,8 @@ public class SimpleMainJPanel extends JPanel implements ActionListener {
 		super(new GridBagLayout());
 
 		simpleHub = hub;
+
+		cbMenu = new JComboBox<TrackingTypeInfo>(toArray(setup.all()));
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;

@@ -1,35 +1,43 @@
 package ca.jhayden.tracking.swing;
 
-import java.util.List;
+import java.util.Objects;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import ca.jhayden.tracking.boundary.TrackApi;
-import ca.jhayden.tracking.boundary.TrackingTypeInfo;
+import ca.jhayden.tracking.boundary.TrackException;
 import ca.jhayden.tracking.swing.simple.SimpleTrackingJFrame;
 import ca.jhayden.tracking.swing.simple.SimpleUiSetup;
 
 public class LaunchTrackingSimpleUI implements Runnable {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws TrackException {
 		final LaunchTrackingSimpleUI launcher = new LaunchTrackingSimpleUI();
+		launcher.initialize();
+
 		SwingUtilities.invokeLater(launcher);
 	}
 
-	private final TrackApi api;
 	private final SimpleTrackingAI ai;
-	private final List<TrackingTypeInfo> mostLikely;
+	private SimpleUiSetup setup = null;
 
 	private LaunchTrackingSimpleUI() {
 		super();
-		api = new TrackApi();
-		ai = new SimpleTrackingAI(api);
-		mostLikely = ai.getMostLikely();
+		ai = new SimpleTrackingAI(new TrackApi());
+	}
+
+	public void initialize() throws TrackException {
+		setup = makeSetup();
+	}
+
+	SimpleUiSetup makeSetup() throws TrackException {
+		ai.load();
+		return ai.computeSetup();
 	}
 
 	@Override
 	public void run() {
-		SimpleUiSetup setup = new SimpleUiSetup(api, ai, mostLikely);
+		Objects.requireNonNull(setup, "Need to call initialize first!");
 		SimpleTrackingJFrame jframe = new SimpleTrackingJFrame(setup);
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jframe.pack();

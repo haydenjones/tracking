@@ -21,7 +21,7 @@ public class SimpleTrackingJFrame extends JFrame implements SimpleHub {
 	@Override
 	public void submit(Track track) {
 		try {
-			setup.api().record(track);
+			setup.ai().record(track);
 			System.out.println("Recorded!");
 		}
 		catch (TrackException e) {

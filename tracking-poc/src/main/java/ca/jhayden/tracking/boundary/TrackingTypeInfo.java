@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 public interface TrackingTypeInfo {
+	public static final TrackingTypeInfo[] EMPTY_ARRAY = new TrackingTypeInfo[0];
 	public static final List<TrackingTypeInfo> EMPTY_LIST = Collections.emptyList();
 
 	public abstract String getCode();

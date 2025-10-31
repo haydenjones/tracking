@@ -2,6 +2,7 @@ package ca.jhayden.tracking.ai;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import ca.jhayden.tracking.boundary.RecordFrequency;
 import ca.jhayden.tracking.boundary.TrackingTypeInfo;
 import ca.jhayden.tracking.entity.Track;
 
-public record MostLikelyTask(List<TrackingTypeInfo> all, List<Track> history) {
+public record MostLikelyTask(Collection<TrackingTypeInfo> all, List<Track> history) {
 	public List<TrackingTypeInfo> call() {
 		this.history.sort(Track.SortBy.WHEN_DESC);
 

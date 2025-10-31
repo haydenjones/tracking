@@ -1,5 +1,6 @@
 package ca.jhayden.tracking.swing.simple;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,6 +12,7 @@ import java.util.Objects;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 import ca.jhayden.tracking.boundary.TrackFormApi;
 import ca.jhayden.tracking.boundary.TrackOrMessage;
@@ -43,6 +45,7 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 	public TrackingJPanel(SimpleHub hub, TrackingTypeInfo tti) {
 		super(new GridBagLayout());
 
+		this.setBorder(new LineBorder(Color.WHITE, 2, true));
 		this.simpleHub = Objects.requireNonNull(hub);
 		this.typeInfo = Objects.requireNonNull(tti);
 

@@ -22,13 +22,6 @@ import ca.jhayden.tracking.entity.Track;
 import ca.jhayden.tracking.swing.SimpleHub;
 
 /**
- * DATE_OF_BIRTH
- * _____________
- * 
- * HEIGHT_CM
- * _________
- * 
- * 
  * 
  */
 public class TrackingJPanel extends JPanel implements ActionListener {
@@ -37,14 +30,16 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 
 	private final SimpleHub simpleHub;
 	private final TrackingTypeInfo typeInfo;
+	private final boolean submitOnEnter;
 
 	private final JTextField tf = new JTextField("");
 	private final JTextField tf2 = new JTextField("");
 	private final JTextField tf3 = new JTextField("");
 
-	public TrackingJPanel(SimpleHub hub, TrackingTypeInfo tti) {
+	public TrackingJPanel(SimpleHub hub, TrackingTypeInfo tti, Track latest, boolean submitOnEnterPressed) {
 		super(new GridBagLayout());
 
+		this.submitOnEnter = submitOnEnterPressed;
 		this.setBorder(new LineBorder(Color.WHITE, 2, true));
 		this.simpleHub = Objects.requireNonNull(hub);
 		this.typeInfo = Objects.requireNonNull(tti);
@@ -54,10 +49,10 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 		this.tf2.setPreferredSize(d);
 		this.tf3.setPreferredSize(d);
 
-		setup(this.typeInfo);
+		setup(this.typeInfo, latest);
 	}
 
-	public void setup(TrackingTypeInfo tti) {
+	void setup(TrackingTypeInfo tti, Track latest) {
 		TrackingFormatType fmt = tti.getFormatType();
 
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -89,12 +84,41 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 			gbc.anchor = GridBagConstraints.WEST;
 			this.add(tf3, gbc);
 		}
+		else if (TrackingFormatType.SINGLE_WHOLE_VALUE == fmt) {
+			gbc.gridy = 1;
+			gbc.fill = GridBagConstraints.HORIZONTAL;
+
+			if (latest != null) {
+				tf.setText("" + latest.getValue1().intValue());
+			}
+			this.add(tf, gbc);
+
+			// Set up Listeners
+			if (this.submitOnEnter) {
+				tf.addActionListener(this);
+			}
+		}
 		else {
 			gbc.gridy = 1;
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			this.add(tf, gbc);
+
 			// Set up Listeners
-			tf.addActionListener(this);
+			if (this.submitOnEnter) {
+				tf.addActionListener(this);
+			}
+		}
+
+		// Update with latest values
+		if (latest != null) {
+			loadValues(tti, latest);
+		}
+	}
+
+	void loadValues(TrackingTypeInfo tti, Track latest) {
+		switch (tti.getFormatType()) {
+		default:
+			break;
 		}
 	}
 

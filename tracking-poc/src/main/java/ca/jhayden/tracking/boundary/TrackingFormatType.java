@@ -1,5 +1,6 @@
 package ca.jhayden.tracking.boundary;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +12,8 @@ public enum TrackingFormatType {
 	DURATION_DISTANCT_CALORIES {
 		@Override
 		public String toString(Track track) {
-			return null;
+			return String.format("%s [%s] %s KM=%s CAL=%s", track.getWhen().format(DTF), track.getTrackingTypeCode(),
+					track.getDuration(), track.getValue1(), track.getMisc());
 		}
 
 		@Override
@@ -24,9 +26,16 @@ public enum TrackingFormatType {
 				final Track t = new Track();
 				t.setDuration(d);
 				t.setFormatType(this);
-				t.setMisc(null);
+
+				// Distance
+				final float kms = Float.parseFloat(form.getText2());
+				t.setValue1(kms);
+
+				// Calcories
+				final BigDecimal calories = new BigDecimal(form.getText3());
+				t.setMisc(calories.toString());
+
 				t.setTrackingTypeCode(form.getTrackingTypeCode());
-				t.setValue1(null);
 				t.setWhen(form.getWhen());
 
 				return new TrackOrMessage(t, null);
@@ -38,7 +47,31 @@ public enum TrackingFormatType {
 
 		@Override
 		public Track parseFromHistory(String line) {
-			return null;
+			// "%s [%s] %s KM=%s CAL=%s"
+			int squareStart = line.indexOf("[");
+			int squareEnd = line.indexOf("]");
+
+			int kmStart = line.indexOf("KM=");
+			int calStart = line.indexOf("CAL=");
+
+			String when = line.substring(0, squareStart).trim();
+			String type = line.substring(squareStart + 1, squareEnd);
+
+			final Track out = new Track();
+			out.setWhen(LocalDateTime.parse(when, DTF));
+			out.setFormatType(this);
+			out.setTrackingTypeCode(type);
+
+			String value = line.substring(squareEnd + 1, kmStart).trim();
+			Duration d = Duration.parse(value);
+			out.setDuration(d);
+
+			value = line.substring(kmStart + 3, calStart).trim();
+			out.setValue1(Float.parseFloat(value));
+
+			out.setMisc(line.substring(calStart + 4).trim());
+
+			return out;
 		}
 	},
 	SINGLE_DATE_VALUE {

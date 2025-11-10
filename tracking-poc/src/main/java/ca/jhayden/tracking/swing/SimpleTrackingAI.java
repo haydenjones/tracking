@@ -3,8 +3,10 @@ package ca.jhayden.tracking.swing;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import ca.jhayden.tracking.ai.MostLikelyTask;
+import ca.jhayden.tracking.boundary.ReportInfo;
 import ca.jhayden.tracking.boundary.TrackApi;
 import ca.jhayden.tracking.boundary.TrackException;
 import ca.jhayden.tracking.boundary.TrackingTypeInfo;
@@ -47,10 +49,14 @@ public class SimpleTrackingAI {
 
 	public SimpleUiSetup computeSetup() {
 		List<TrackingTypeInfo> mostLikely = this.getMostLikely();
-		return new SimpleUiSetup(this, mostLikely, allTypesMap.values());
+		return new SimpleUiSetup(this, mostLikely, allTypesMap.values(), null, ReportInfo.EMPTY_LIST);
 	}
 
 	public void record(Track track) throws TrackException {
 		trackApi.record(track);
+	}
+
+	public Optional<Track> getLatest(String code) {
+		return Optional.ofNullable(latestOfType.get(code));
 	}
 }

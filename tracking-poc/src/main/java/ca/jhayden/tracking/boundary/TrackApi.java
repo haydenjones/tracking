@@ -41,6 +41,16 @@ public class TrackApi {
 		}
 	}
 
+	public List<ReportInfo> getReports() throws TrackException {
+		List<ReportInfo> list = new ArrayList<>();
+
+		for (SimpleReport sr : SimpleReport.values()) {
+			list.add(sr);
+		}
+
+		return list;
+	}
+
 	public List<Track> getHistory() throws TrackException {
 		final var history = new ArrayList<Track>();
 
@@ -71,6 +81,10 @@ public class TrackApi {
 
 		return history;
 	}
+}
+
+enum SimpleReport implements ReportInfo {
+	WEIGHT; //
 }
 
 enum SimpleTrackingType implements TrackingTypeInfo {

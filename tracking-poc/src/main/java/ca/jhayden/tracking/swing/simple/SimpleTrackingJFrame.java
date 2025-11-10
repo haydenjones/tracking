@@ -1,5 +1,7 @@
 package ca.jhayden.tracking.swing.simple;
 
+import java.util.Optional;
+
 import javax.swing.JFrame;
 
 import ca.jhayden.tracking.boundary.TrackException;
@@ -27,5 +29,10 @@ public class SimpleTrackingJFrame extends JFrame implements SimpleHub {
 		catch (TrackException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Optional<Track> getLatest(String code) {
+		return setup.ai().getLatest(code);
 	}
 }

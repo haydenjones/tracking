@@ -53,59 +53,76 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 	}
 
 	void setup(TrackingTypeInfo tti, Track latest) {
-		TrackingFormatType fmt = tti.getFormatType();
+		final TrackingFormatType fmt = tti.getFormatType();
 
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		this.add(new JLabel(tti.toString()), gbc);
 
-		if (TrackingFormatType.DURATION_DISTANCT_CALORIES == fmt) {
-			gbc.gridy = 1;
-			gbc.gridx = 0;
-			gbc.anchor = GridBagConstraints.EAST;
-			this.add(new JLabel("Duration:"), gbc);
-			gbc.gridx = 1;
-			gbc.anchor = GridBagConstraints.WEST;
-			this.add(tf, gbc);
+		switch (fmt) {
+			case DURATION_DISTANCT_CALORIES -> {
+				gbc.gridy = 1;
+				gbc.gridx = 0;
+				gbc.anchor = GridBagConstraints.EAST;
+				this.add(new JLabel("Duration:"), gbc);
+				gbc.gridx = 1;
+				gbc.anchor = GridBagConstraints.WEST;
+				this.add(tf, gbc);
 
-			gbc.gridy = 2;
-			gbc.gridx = 0;
-			gbc.anchor = GridBagConstraints.EAST;
-			this.add(new JLabel("Distance:"), gbc);
-			gbc.gridx = 1;
-			gbc.anchor = GridBagConstraints.WEST;
-			this.add(tf2, gbc);
+				gbc.gridy = 2;
+				gbc.gridx = 0;
+				gbc.anchor = GridBagConstraints.EAST;
+				this.add(new JLabel("Distance:"), gbc);
+				gbc.gridx = 1;
+				gbc.anchor = GridBagConstraints.WEST;
+				this.add(tf2, gbc);
 
-			gbc.gridy = 3;
-			gbc.gridx = 0;
-			gbc.anchor = GridBagConstraints.EAST;
-			this.add(new JLabel("Calories:"), gbc);
-			gbc.gridx = 1;
-			gbc.anchor = GridBagConstraints.WEST;
-			this.add(tf3, gbc);
-		}
-		else if (TrackingFormatType.SINGLE_WHOLE_VALUE == fmt) {
-			gbc.gridy = 1;
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-
-			if (latest != null) {
-				tf.setText("" + latest.getValue1().intValue());
+				gbc.gridy = 3;
+				gbc.gridx = 0;
+				gbc.anchor = GridBagConstraints.EAST;
+				this.add(new JLabel("Calories:"), gbc);
+				gbc.gridx = 1;
+				gbc.anchor = GridBagConstraints.WEST;
+				this.add(tf3, gbc);
 			}
-			this.add(tf, gbc);
+			case SINGLE_DATE_VALUE, TEXT_VALUE -> {
+				gbc.gridy = 1;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
 
-			// Set up Listeners
-			if (this.submitOnEnter) {
-				tf.addActionListener(this);
+				this.add(tf, gbc);
+
+				// Set up Listeners
+				if (this.submitOnEnter) {
+					tf.addActionListener(this);
+				}
 			}
-		}
-		else {
-			gbc.gridy = 1;
-			gbc.fill = GridBagConstraints.HORIZONTAL;
-			this.add(tf, gbc);
+			case SINGLE_FLOAT_VALUE -> {
+				gbc.gridy = 1;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
 
-			// Set up Listeners
-			if (this.submitOnEnter) {
-				tf.addActionListener(this);
+				if (latest != null) {
+					tf.setText("" + latest.getValue1());
+				}
+				this.add(tf, gbc);
+
+				// Set up Listeners
+				if (this.submitOnEnter) {
+					tf.addActionListener(this);
+				}
+			}
+			case SINGLE_WHOLE_VALUE -> {
+				gbc.gridy = 1;
+				gbc.fill = GridBagConstraints.HORIZONTAL;
+
+				if (latest != null) {
+					tf.setText("" + latest.getValue1().intValue());
+				}
+				this.add(tf, gbc);
+
+				// Set up Listeners
+				if (this.submitOnEnter) {
+					tf.addActionListener(this);
+				}
 			}
 		}
 
@@ -117,8 +134,8 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 
 	void loadValues(TrackingTypeInfo tti, Track latest) {
 		switch (tti.getFormatType()) {
-		default:
-			break;
+			default:
+				break;
 		}
 	}
 
@@ -172,7 +189,7 @@ class TrackFormInfo implements TrackFormApi {
 	}
 
 	@Override
-	public String getText() {
+	public String getText1() {
 		return text;
 	}
 

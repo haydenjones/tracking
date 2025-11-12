@@ -22,7 +22,7 @@ public enum TrackingFormatType {
 				// Duration = text1
 				// Distance = text2
 				// Calories = text3
-				Duration d = Duration.parse(form.getText());
+				Duration d = Duration.parse(form.getText1());
 				final Track t = new Track();
 				t.setDuration(d);
 				t.setFormatType(this);
@@ -78,7 +78,7 @@ public enum TrackingFormatType {
 		@Override
 		public TrackOrMessage parse(TrackFormApi form) {
 			try {
-				final LocalDate ld = LocalDate.parse(form.getText());
+				final LocalDate ld = LocalDate.parse(form.getText1());
 				final Track t = new Track();
 
 				t.setFormatType(this);
@@ -121,7 +121,7 @@ public enum TrackingFormatType {
 		@Override
 		public TrackOrMessage parse(TrackFormApi form) {
 			try {
-				final float value = Float.parseFloat(form.getText());
+				final float value = Float.parseFloat(form.getText1());
 				final Track t = new Track();
 
 				t.setFormatType(this);
@@ -163,7 +163,7 @@ public enum TrackingFormatType {
 		@Override
 		public TrackOrMessage parse(TrackFormApi form) {
 			try {
-				final Integer value = Integer.parseInt(form.getText());
+				final Integer value = Integer.parseInt(form.getText1());
 				final Track t = new Track();
 
 				t.setFormatType(this);
@@ -209,7 +209,7 @@ public enum TrackingFormatType {
 			try {
 				final Track t = new Track();
 				t.setFormatType(this);
-				t.setMisc(form.getText().trim());
+				t.setMisc(form.getText1().trim());
 				t.setTrackingTypeCode(form.getTrackingTypeCode());
 				t.setValue1(ZERO);
 				t.setWhen(form.getWhen());

@@ -1,6 +1,7 @@
 package ca.jhayden.tracking.swing;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,7 +50,11 @@ public class SimpleTrackingAI {
 
 	public SimpleUiSetup computeSetup() {
 		List<TrackingTypeInfo> mostLikely = this.getMostLikely();
-		return new SimpleUiSetup(this, mostLikely, allTypesMap.values(), null, ReportInfo.EMPTY_LIST);
+		final Map<TrackingTypeInfo, Track> typesWithLatest = new LinkedHashMap<>();
+		for (TrackingTypeInfo tti : allTypesMap.values()) {
+			typesWithLatest.put(tti, this.getLatest(tti.getCode()).orElse(null));
+		}
+		return new SimpleUiSetup(this, mostLikely, typesWithLatest, null, ReportInfo.EMPTY_LIST);
 	}
 
 	public void record(Track track) throws TrackException {

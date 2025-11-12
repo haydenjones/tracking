@@ -1,4 +1,4 @@
-package ca.jhayden.tracking.jframe;
+package ca.jhayden.tracking.swing.simple;
 
 import javax.swing.JButton;
 

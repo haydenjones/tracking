@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +17,9 @@ import javax.swing.JPanel;
 
 import ca.jhayden.tracking.boundary.TrackFormApi;
 import ca.jhayden.tracking.boundary.TrackOrMessage;
+import ca.jhayden.tracking.boundary.TrackingFormatType;
 import ca.jhayden.tracking.boundary.TrackingTypeInfo;
 import ca.jhayden.tracking.entity.Track;
-import ca.jhayden.tracking.jframe.TrackingJButton;
 import ca.jhayden.tracking.swing.SimpleHub;
 import ca.jhayden.tracking.swing.simple.inspire.InspireJPanel;
 import ca.jhayden.tracking.swing.simple.reports.ReportsJPanel;
@@ -45,7 +46,7 @@ public class SimpleMainJPanel extends JPanel implements ActionListener {
 
 		simpleHub = hub;
 
-		cbMenu = new JComboBox<TrackingTypeInfo>(toArray(setup.all()));
+		cbMenu = new JComboBox<TrackingTypeInfo>(toArray(setup.all().keySet()));
 		cbMenu.addActionListener(this);
 
 		reportsPanel = new ReportsJPanel(hub);
@@ -65,12 +66,12 @@ public class SimpleMainJPanel extends JPanel implements ActionListener {
 		gbc.gridy = 1;
 		gbc.gridx = 0;
 		gbc.gridwidth = 1;
-		this.addButton(setup.expecting(), 1, gbc);
+		this.addButton(setup, 1, gbc);
 		gbc.gridx = 1;
-		this.addButton(setup.expecting(), 2, gbc);
+		this.addButton(setup, 2, gbc);
 
 		gbc.gridx = 2;
-		this.addButton(setup.expecting(), 3, gbc);
+		this.addButton(setup, 3, gbc);
 
 		gbc.gridy = 2;
 		gbc.gridx = 0;
@@ -85,15 +86,26 @@ public class SimpleMainJPanel extends JPanel implements ActionListener {
 		this.add(inspirePanel, gbc);
 	}
 
-	void addButton(List<TrackingTypeInfo> list, int index, GridBagConstraints gbc) {
+	void addButton(SimpleUiSetup setup, int index, GridBagConstraints gbc) {
 		assert index >= 0;
 
+		List<TrackingTypeInfo> list = new ArrayList<TrackingTypeInfo>(setup.all().keySet());
 		if (list.size() <= index) {
 			return;
 		}
 
 		final TrackingTypeInfo tti = list.get(index);
-		JButton jb = new TrackingJButton(tti);
+		Track latest = setup.all().get(tti);
+
+		final JButton jb;
+
+		if ((latest != null) && (tti.getFormatType() == TrackingFormatType.SINGLE_WHOLE_VALUE)) {
+			jb = new TrackingSingleValueJButton(tti, latest);
+		}
+		else {
+			jb = new TrackingJButton(tti);
+		}
+
 		this.add(jb, gbc);
 		jb.addActionListener(this);
 	}
@@ -117,6 +129,20 @@ public class SimpleMainJPanel extends JPanel implements ActionListener {
 			System.out.println(tjb);
 			TrackingTypeInfo tti = tjb.getTypeInfo();
 			doPopup(tti);
+		}
+		else if (e.getSource() instanceof TrackingSingleValueJButton button) {
+			TrackingTypeInfo typeInfo = button.getTrackingTypeInfo();
+			TrackingFormatType fmt = typeInfo.getFormatType();
+			TrackFormApi tfa = button;
+			TrackOrMessage tom = fmt.parse(tfa);
+
+			final Track track = tom.track();
+			if (track != null) {
+				simpleHub.submit(track);
+			}
+			else {
+				System.out.println(tom.message());
+			}
 		}
 		else if (e.getSource() == this.cbMenu) {
 			// Do Something...

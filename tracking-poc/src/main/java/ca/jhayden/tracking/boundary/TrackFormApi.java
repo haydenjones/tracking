@@ -7,7 +7,7 @@ public interface TrackFormApi {
 
 	public abstract String getTrackingTypeCode();
 
-	public abstract String getText();
+	public abstract String getText1();
 
 	public abstract String getText2();
 

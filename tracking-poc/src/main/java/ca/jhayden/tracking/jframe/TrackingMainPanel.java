@@ -8,6 +8,7 @@ import java.util.List;
 import javax.swing.JPanel;
 
 import ca.jhayden.tracking.boundary.TrackingTypeInfo;
+import ca.jhayden.tracking.swing.simple.TrackingJButton;
 
 public class TrackingMainPanel extends JPanel implements ActionListener {
 

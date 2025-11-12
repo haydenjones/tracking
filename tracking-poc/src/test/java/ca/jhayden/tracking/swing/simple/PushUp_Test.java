@@ -26,7 +26,7 @@ public class PushUp_Test implements SimpleHub, TrackingTypeInfo {
 		TrackingJPanel panel = new TrackingJPanel(this, tti, latest, false);
 
 		TrackFormApi actual = panel.createForm();
-		Assertions.assertEquals(EXPECTING, actual.getText(), "# of push ups");
+		Assertions.assertEquals(EXPECTING, actual.getText1(), "# of push ups");
 	}
 
 	@Override

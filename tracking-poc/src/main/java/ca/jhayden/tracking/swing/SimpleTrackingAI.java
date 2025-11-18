@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.jfree.chart.JFreeChart;
+
 import ca.jhayden.tracking.ai.MostLikelyTask;
 import ca.jhayden.tracking.boundary.ReportInfo;
 import ca.jhayden.tracking.boundary.TrackApi;
 import ca.jhayden.tracking.boundary.TrackException;
 import ca.jhayden.tracking.boundary.TrackingTypeInfo;
+import ca.jhayden.tracking.charts.WeightVsTime;
 import ca.jhayden.tracking.entity.Track;
 import ca.jhayden.tracking.swing.simple.SimpleUiSetup;
 
@@ -63,5 +66,10 @@ public class SimpleTrackingAI {
 
 	public Optional<Track> getLatest(String code) {
 		return Optional.ofNullable(latestOfType.get(code));
+	}
+
+	public JFreeChart makeReport(ReportInfo report) {
+		WeightVsTime chartMaker = new WeightVsTime(history);
+		return chartMaker.perform();
 	}
 }

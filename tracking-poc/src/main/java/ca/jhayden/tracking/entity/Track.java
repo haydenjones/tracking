@@ -13,12 +13,18 @@ import ca.jhayden.util.Strings;
 
 public class Track {
 	public enum SortBy implements Comparator<Track> {
-		WHEN_DESC;
-
-		@Override
-		public int compare(Track o1, Track o2) {
-			return o2.getWhen().compareTo(o1.getWhen());
-		}
+		WHEN_ASC {
+			@Override
+			public int compare(Track o1, Track o2) {
+				return o1.getWhen().compareTo(o2.getWhen());
+			}
+		},
+		WHEN_DESC {
+			@Override
+			public int compare(Track o1, Track o2) {
+				return o2.getWhen().compareTo(o1.getWhen());
+			}
+		};
 	}
 
 	public static final List<Track> EMPTY_LIST = Collections.emptyList();

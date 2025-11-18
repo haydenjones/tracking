@@ -2,10 +2,12 @@ package ca.jhayden.tracking.swing.simple;
 
 import java.util.Optional;
 
+import org.jfree.chart.JFreeChart;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import ca.jhayden.tracking.boundary.RecordFrequency;
+import ca.jhayden.tracking.boundary.ReportInfo;
 import ca.jhayden.tracking.boundary.TrackFormApi;
 import ca.jhayden.tracking.boundary.TrackingFormatType;
 import ca.jhayden.tracking.boundary.TrackingTypeInfo;
@@ -54,5 +56,10 @@ public class PushUp_Test implements SimpleHub, TrackingTypeInfo {
 	@Override
 	public RecordFrequency getRecordFrequency() {
 		return RecordFrequency.FREQUENT;
+	}
+
+	@Override
+	public JFreeChart makeChart(ReportInfo report) {
+		throw new UnsupportedOperationException();
 	}
 }

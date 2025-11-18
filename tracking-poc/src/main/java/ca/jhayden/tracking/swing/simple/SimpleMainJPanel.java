@@ -49,7 +49,7 @@ public class SimpleMainJPanel extends JPanel implements ActionListener {
 		cbMenu = new JComboBox<TrackingTypeInfo>(toArray(setup.all().keySet()));
 		cbMenu.addActionListener(this);
 
-		reportsPanel = new ReportsJPanel(hub);
+		reportsPanel = ReportsJPanel.getInstance(hub);
 		inspirePanel = new InspireJPanel();
 
 		GridBagConstraints gbc = new GridBagConstraints();

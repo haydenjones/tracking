@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import javax.swing.JFrame;
 
+import org.jfree.chart.JFreeChart;
+
+import ca.jhayden.tracking.boundary.ReportInfo;
 import ca.jhayden.tracking.boundary.TrackException;
 import ca.jhayden.tracking.entity.Track;
 import ca.jhayden.tracking.swing.SimpleHub;
@@ -34,5 +37,10 @@ public class SimpleTrackingJFrame extends JFrame implements SimpleHub {
 	@Override
 	public Optional<Track> getLatest(String code) {
 		return setup.ai().getLatest(code);
+	}
+
+	@Override
+	public JFreeChart makeChart(ReportInfo report) {
+		return setup.ai().makeReport(report);
 	}
 }

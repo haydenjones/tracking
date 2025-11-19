@@ -96,27 +96,10 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 					tf.addActionListener(this);
 				}
 			}
-			case SINGLE_FLOAT_VALUE -> {
+			case SINGLE_FLOAT_VALUE, SINGLE_WHOLE_VALUE -> {
 				gbc.gridy = 1;
 				gbc.fill = GridBagConstraints.HORIZONTAL;
 
-				if (latest != null) {
-					tf.setText("" + latest.getValue1());
-				}
-				this.add(tf, gbc);
-
-				// Set up Listeners
-				if (this.submitOnEnter) {
-					tf.addActionListener(this);
-				}
-			}
-			case SINGLE_WHOLE_VALUE -> {
-				gbc.gridy = 1;
-				gbc.fill = GridBagConstraints.HORIZONTAL;
-
-				if (latest != null) {
-					tf.setText("" + latest.getValue1().intValue());
-				}
 				this.add(tf, gbc);
 
 				// Set up Listeners
@@ -127,15 +110,30 @@ public class TrackingJPanel extends JPanel implements ActionListener {
 		}
 
 		// Update with latest values
-		if (latest != null) {
-			loadValues(tti, latest);
-		}
+		loadValues(tti, latest);
 	}
 
 	void loadValues(TrackingTypeInfo tti, Track latest) {
+		System.out.println(tti + ": " + tti.getFormatType());
+		System.out.println(latest);
+		if (latest == null) {
+			return;
+		}
+
+		String value = System.console().readLine("Your name?");
+
 		switch (tti.getFormatType()) {
-			default:
-				break;
+			case DURATION_DISTANCT_CALORIES -> {
+				tf.setText("" + latest.getDuration().toString());
+				tf2.setText("" + latest.getValue1());
+				tf3.setText("" + latest.getMisc());
+			}
+			case SINGLE_DATE_VALUE, TEXT_VALUE -> {
+				tf.setText("" + latest.getMisc());
+			}
+			case SINGLE_FLOAT_VALUE, SINGLE_WHOLE_VALUE -> {
+				tf.setText("" + latest.getValue1());
+			}
 		}
 	}
 

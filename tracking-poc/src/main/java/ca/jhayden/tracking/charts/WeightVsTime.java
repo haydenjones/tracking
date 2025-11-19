@@ -37,7 +37,7 @@ public class WeightVsTime {
 
 	Range computeRange(MinMax minMax) {
 		System.out.println(minMax);
-		Range r = new Range(computeMin(minMax.min(), 5, 5), computeMax(minMax.max(), 5, 5));
+		Range r = new Range(computeMin(minMax.min(), 5, 1f), computeMax(minMax.max(), 5, 1f));
 		System.out.println(r);
 		return r;
 	}
